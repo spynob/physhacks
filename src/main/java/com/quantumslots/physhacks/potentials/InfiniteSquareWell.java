@@ -21,18 +21,14 @@ public class InfiniteSquareWell extends PotentialFunction {
      * @param basisFunctions Holds the values for which eigenbasis to use
      * @param magnitudes Holds the value of the magnitudes of the eigenbasis
      */
-    public InfiniteSquareWell(ArrayList<Integer> basisFunctions, ArrayList<Double> magnitudes) {
-        super(Potentials.InfiniteSquareWell, basisFunctions, magnitudes);
+    public InfiniteSquareWell(ArrayList<Integer> basisFunctions, ArrayList<Double> magnitudes, double mass) {
+        super(Potentials.InfiniteSquareWell, basisFunctions, magnitudes, mass);
     }
     @Override
     public double evaluate(double position, double time) {
         return 0;
     }
 
-    @Override
-    public double makeMeasurement(double position, double time) {
-        return 0;
-    }
 
     @Override
     public double eigenBasis(double x, double t, int n) {
@@ -40,7 +36,7 @@ public class InfiniteSquareWell extends PotentialFunction {
     }
 
     @Override
-    public double energy(int basisNumber) {
-        return 0;
+    public double energy(int n) {
+        return Math.pow(n,2) * Math.pow(Math.PI, 2) * Math.pow(super.HBAR,2) / 4 * super.getMass();
     }
 }
