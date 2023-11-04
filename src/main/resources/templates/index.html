@@ -107,6 +107,16 @@ input[type="range"] {
             <div class="form_control_container__time">Max</div>
             <input class="form_control_container__time__input" type="number" id="toInput" th:value="${selector2}" value="100" min="-100" max="100" />
         </div>
+        <div class="form_control_container">
+            <p th:utext="Amount left: #{home.welcome}!">Amount left: NaN!</p>
+            <div class="form_control_container__time">Amount left:</div>
+            <div class="form_control_container__time">test</div>
+
+        </div>
+        <div class="form_control_container">
+            <div class="form_control_container__time">Betting Amount: </div>
+            <input class="form_control_container__time__input" type="number" id="amtToBet" value="0" min="0" max="100" />
+        </div>
             <input type="submit" value="MEASURE!">
         </form>
     </div>
