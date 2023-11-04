@@ -29,7 +29,12 @@ public class InfiniteSquareWell extends PotentialFunction {
         return 0;
     }
 
-
+    /**
+     * Evaluate value of the eigenbasis
+     * @param x Position at which to evaluate the basis
+     * @param n Number determining which eigenbasis to evaluate.
+     * @return
+     */
     @Override
     public double eigenBasis(double x, int n) {
         return super.getMagnitudes().get(n) * Math.sin(n * Math.PI * x / 2);
