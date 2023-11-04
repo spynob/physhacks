@@ -33,7 +33,6 @@ public abstract class PotentialFunction {
 
     }
     public Potentials getPotentialStructure() {
-
         return potentialStructure;
     }
     /**
@@ -61,7 +60,7 @@ public abstract class PotentialFunction {
      * @param basisNumber Number determining which eigenbasis to evaluate.
      * @return
      */
-    public abstract double eigenBasis(double position, double time, int basisNumber);
+    public abstract double eigenBasis(double position, int basisNumber);
 
     public abstract double energy(int basisNumber);
 
