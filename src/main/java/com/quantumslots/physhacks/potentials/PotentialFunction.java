@@ -8,6 +8,8 @@ import java.util.Arrays;
 
 public abstract class PotentialFunction {
     public final double HBAR = 1.05457182E-34;
+
+    private double mass;
     private Potentials potentialStructure;
     // List holding the eigenstates used
     private ArrayList<Integer> basisFunctions;
@@ -18,13 +20,15 @@ public abstract class PotentialFunction {
         potentialStructure = potentialType;
         basisFunctions = new ArrayList<>(Arrays.asList(1));
         magnitudes = new ArrayList<>(Arrays.asList(1.0));
+        mass = 1;
         normalizeMagnitudes();
     }
     //Constructor
-    public PotentialFunction(Potentials potentialType, ArrayList<Integer> basisFunctions, ArrayList<Double> magnitudes) {
+    public PotentialFunction(Potentials potentialType, ArrayList<Integer> basisFunctions, ArrayList<Double> magnitudes, double mass) {
         potentialStructure = potentialType;
         this.basisFunctions = basisFunctions;
         this.magnitudes = magnitudes;
+        this.mass = mass;
         normalizeMagnitudes();
 
     }
@@ -38,14 +42,18 @@ public abstract class PotentialFunction {
      * @param time Time at which the function is to be evaluated
      * @return The probability density of the wave function
      */
-    public abstract double evaluate(double position, double time);
+    public double evaluate(double position, double time){
+        return 0;
+    }
 
     /**
      * "Observe" the particle and makes the wavefunction collapse
      * @param time Time at which the function is to be observed
      * @return The position of the collapse
      */
-    public abstract double makeMeasurement(double position, double time);
+    public double makeMeasurement(double position, double time) {
+        return 0;
+    }
 
     /**
      * Evaluates the value of the nth eigenbasis
@@ -73,9 +81,11 @@ public abstract class PotentialFunction {
             magnitudes.set(i, magnitudes.get(i)/Math.pow(sum, 0.5));
         }
     }
-
+    // Getters
     public ArrayList<Double> getMagnitudes() {
         return magnitudes;
     }
+
+    public double getMass() { return mass; }
 
 }
