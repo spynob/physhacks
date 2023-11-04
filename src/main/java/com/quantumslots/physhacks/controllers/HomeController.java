@@ -54,8 +54,8 @@ public class HomeController {
     }
     public void measure(double time){
         double position = potential.makeMeasurement(time);
-        double selector1 = player.getSelector1position();
-        double selector2 = player.getSelector2position();
+        float selector1 = player.getSelector1position();
+        float selector2 = player.getSelector2position();
 
         if (selector1 <= position && position <= selector2) {
             // what are gains
