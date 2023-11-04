@@ -31,12 +31,12 @@ public class InfiniteSquareWell extends PotentialFunction {
 
 
     @Override
-    public double eigenBasis(double x, double t, int n) {
-        return super.getMagnitudes().get(n) * Math.sin(n * Math.PI * x / 2) * Math.cos(1 * t/super.HBAR);
+    public double eigenBasis(double x, int n) {
+        return super.getMagnitudes().get(n) * Math.sin(n * Math.PI * x / 2);
     }
 
     @Override
     public double energy(int n) {
-        return Math.pow(n,2) * Math.pow(Math.PI, 2) * Math.pow(super.HBAR,2) / 4 * super.getMass();
+        return Math.pow(n,2) * Math.pow(Math.PI, 2) * Math.pow(super.HBAR,2) / (2 * boundaries[1] - boundaries[0] * super.getMass());
     }
 }
