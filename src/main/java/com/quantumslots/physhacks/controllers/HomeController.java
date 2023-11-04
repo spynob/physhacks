@@ -8,6 +8,7 @@ import com.quantumslots.physhacks.service.utils.PlayerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.quantumslots.physhacks.service.utils.PlayerUtils;
@@ -40,11 +41,16 @@ public class HomeController {
     }
 
     public void changePotential(Potentials potential){}
-    public void measure(){}
+
+    @RequestMapping(value = "/measure", method = RequestMethod.POST)
+    public String measure(Model model, @ModelAttribute Player newPlayerProfile){
+        player.setSelector1position(newPlayerProfile.getSelector1position());
+        player.setSelector2position(newPlayerProfile.getSelector2position());
+        return HOME;
+    }
 
     private void generateModel(Model model){
-        model.addAttribute("selector1", player.getSelector1position());
-        model.addAttribute("selector2", player.getSelector2position());
+        model.addAttribute("player", player);
     }
 
 }
