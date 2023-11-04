@@ -5,9 +5,13 @@ import com.quantumslots.physhacks.model.Potentials;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public abstract class PotentialFunction {
     public final double HBAR = 1.05457182E-34;
+    int[] boundaries = {-1, 1};
+    int a = boundaries[1];
+    int L = 2 * a;
 
     private double mass;
     private Potentials potentialStructure;
@@ -27,22 +31,42 @@ public abstract class PotentialFunction {
     public PotentialFunction(Potentials potentialType, ArrayList<Integer> basisFunctions, ArrayList<Double> magnitudes, double mass) {
         potentialStructure = potentialType;
         this.basisFunctions = basisFunctions;
-        this.magnitudes = magnitudes;
+        this.magnitudes = magnitudes; // make function to randomize magnitudes
         this.mass = mass;
         normalizeMagnitudes();
-
     }
+
+    public abstract double evaluate_probability(double x1, double x2, ArrayList<Integer> basisFunctions, ArrayList<Double> magnitudes);
+
     public Potentials getPotentialStructure() {
         return potentialStructure;
     }
     /**
-     * Evaluates the value of the wave function
-     * @param position Position along the x axis where the function is to be evaluated
-     * @param time Time at which the function is to be evaluated
-     * @return The probability density of the wave function
+     * Evaluates the value of the real part of the wave function
+     * @param x Position along the x-axis where the function is to be evaluated
+     * @param t Time at which the function is to be evaluated
+     * @return The value of Re{psi(x,t)}
      */
-    public double evaluate(double position, double time){
-        return 0;
+    public double psi_real(double x, double t){
+        double total = 0;
+        for (int n : basisFunctions) {
+            total += magnitudes.get(n) * eigenBasis(x, n) * Math.cos(energy(n) * t);
+        }
+    return total;
+    }
+
+    /**
+     * Evaluates the value of the imaginary part of the wave function
+     * @param x Position along the x-axis where the function is to be evaluated
+     * @param t Time at which the function is to be evaluated
+     * @return The value of Im{psi(x,t)}
+     */
+    public double psi_imaginary(double x, double t){
+        double total = 0;
+        for (int n : basisFunctions) {
+            total += magnitudes.get(n) * eigenBasis(x, n) * Math.sin(energy(n) * t);
+        }
+        return total;
     }
 
     /**
@@ -50,8 +74,27 @@ public abstract class PotentialFunction {
      * @param time Time at which the function is to be observed
      * @return The position of the collapse
      */
-    public double makeMeasurement(double position, double time) {
-        return 0;
+    public double makeMeasurement(double time) {
+        Random random = new Random();
+        float randomFloat = random.nextFloat(); // Random float between 0 (inclusive) and 1 (exclusive)
+
+        // Scale and shift the random float to be between -1 and 1
+        randomFloat = randomFloat * 2 - 1;
+        // idea: To generate a random number according to a probability distribution, we find
+        // an x such that P(-1, x) = randomFloat, where P(x0,x1) is the PDF.
+
+        // initialize integration bounds from left-end to halfway
+        double lowerBound = boundaries[0];
+        double rightEnd = boundaries[1];
+        double x= lowerBound + rightEnd / 2; // initially integrating from -1 to 0
+        double probability;
+
+        for (int i = 0; i < 50; i ++) { // do binary search 50 times assuming that's enough to find special x
+            probability = evaluate_probability(lowerBound, x, basisFunctions, magnitudes);
+            if (probability < randomFloat) x = x + rightEnd / 2;
+            else x = x + lowerBound / 2;
+        }
+        return x;
     }
 
     /**
