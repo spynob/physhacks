@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.Objects;
+
 @Controller
 public class HomeController {
 
@@ -29,22 +31,25 @@ public class HomeController {
     private RewardService rewardService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String init(Model model){
-        player = PlayerUtils.getDefaultPlayer();
-        potential = new InfiniteSquareWell();
+    public String home(Model model){
+        if (Objects.isNull(player)){init();}
         generateModel(model);
         return HOME;
+    }
+
+    private void init() {
+        player = PlayerUtils.getDefaultPlayer();
+        potential = new InfiniteSquareWell();
+        // Initialize timer;
     }
 
     private void generateModel(Model model) {
         model.addAttribute("player", player);
     }
 
-    public void placeBet(int bet){
+    public String placeBet(Model model, int bet){
         player.setBet(bet);
-    }
-
-    public void selectRange(float selector1, float selector2){
+        return "redirect:/";
     }
 
     @RequestMapping()
@@ -55,16 +60,14 @@ public class HomeController {
 
     @RequestMapping(value = "/measure", method = RequestMethod.POST)
     public String ROLL(Model model, @ModelAttribute("player") Player player){
-        player.setBudget(player.getBudget());
-        player.setBet(player.getBet());
-        player.setSelector1position(player.getSelector1position());
-        player.setSelector2position(player.getSelector2position());
+        this.player.setBet(player.getBet());
+        this.player.setSelector1position(player.getSelector1position());
+        this.player.setSelector2position(player.getSelector2position());
         //measure(timer);
-        generateModel(model);
-        return HOME;
+        return "redirect:/";
     }
 
-    public void measure(double time){
+    private void measure(double time){
         double position = potential.makeMeasurement(time);
         float selector1 = player.getSelector1position();
         float selector2 = player.getSelector2position();

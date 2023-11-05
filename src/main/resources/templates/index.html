@@ -95,24 +95,24 @@ input[type="range"] {
 </div>
 <div class="range_container">
     <div class="sliders_control">
-        <input id="fromSlider" type="range" th:value="${player.selector1position}" value="-100" min="-100" max="100"/>
-        <input id="toSlider" type="range" th:value="${player.selector2position}" value="100" min="-100" max="100"/>
+        <input id="fromSlider" type="range" th:field="${player.selector1position}" value="-100" min="-100" max="100"/>
+        <input id="toSlider" type="range" th:field="${player.selector2position}" value="100" min="-100" max="100"/>
     </div>
     <div class="form_control">
         <form th:action="@{/measure}" action="#" method="post" th:object="${player}">
             <div class="form_control_container">
                 <div class="form_control_container__time">Min</div>
                 <input class="form_control_container__time__input" type="number" id="fromInput"
-                       th:value="*{selector1position}" value="-100" min="-100" max="100"/>
+                       th:field="*{selector1position}" value="-100" min="-100" max="100"/>
             </div>
             <div class="form_control_container">
                 <div class="form_control_container__time">Max</div>
                 <input class="form_control_container__time__input" type="number" id="toInput"
-                       th:value="*{selector2position}" value="100" min="-100" max="100"/>
+                       th:field="*{selector2position}" value="100" min="-100" max="100"/>
             </div>
             <div>
-                <input type="number" th:value="*{bet}">
-                <input type="number" th:value="*{budget}">
+                <input type="number" th:field="*{bet}">
+                <div type="number" th:text="'Budget: ' + *{budget}">
             </div>
             <input type="submit" value="MEASURE!">
         </form>

@@ -15,9 +15,6 @@ public class Player {
     }
 
     public void setBet(int bet) {
-        if (bet < 0 || bet > budget){
-            throw new IllegalArgumentException("Not a valid bet");
-        }
         this.bet = bet;
     }
 
