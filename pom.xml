@@ -17,6 +17,11 @@
 		<javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-swing</artifactId>
+			<version>19.0.2.1</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.jfree/jfreechart -->
 		<dependency>
 			<groupId>org.jfree</groupId>
@@ -54,6 +59,12 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
+			<version>21.0.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-swing</artifactId>
 			<version>21.0.1</version>
 		</dependency>
 
