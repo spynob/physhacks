@@ -1,9 +1,6 @@
 package com.quantumslots.physhacks.model.potentials;
 
-
-
 import com.quantumslots.physhacks.model.Potentials;
-
 import java.util.ArrayList;
 
 
@@ -18,17 +15,12 @@ public class InfiniteSquareWell extends PotentialFunction {
      * Default constructor for the infinite square well.
      * It creates a wave function with only the first eigenbasis
      */
-    public InfiniteSquareWell() {
-        super(Potentials.InfiniteSquareWell);
-    }
 
     /**
      * Constructor
-     * @param basisFunctions Holds the values for which eigenbasis to use
-     * @param magnitudes Holds the value of the magnitudes of the eigenbasis
      */
-    public InfiniteSquareWell(ArrayList<Integer> basisFunctions, ArrayList<Double> magnitudes, double mass) {
-        super(Potentials.InfiniteSquareWell, basisFunctions, magnitudes, mass);
+    public InfiniteSquareWell() {
+        super(Potentials.InfiniteSquareWell);
     }
 
     @Override
@@ -40,9 +32,10 @@ public class InfiniteSquareWell extends PotentialFunction {
      */
     public double evaluate_probability(double x1, double x2, ArrayList<Integer> basisFunctions, ArrayList<Double> magnitudes) {
         double total = 0;
-        for (int n : basisFunctions) {
-            total += Math.pow(magnitudes.get(n), 2) * (x1 / 2 - Math.sin(n * Math.PI * (x1 + a)) / 2 * Math.PI * n)
-                    -Math.pow(magnitudes.get(n), 2) * (x2 / 2 - Math.sin(n * Math.PI * (x2 + a)) / 2 * Math.PI * n);
+        for (int i=0; i<basisFunctions.size();i++) {
+            int  n = basisFunctions.get(i);
+            total += Math.pow(magnitudes.get(i), 2) * (x1 / 2 - Math.sin(n * Math.PI * (x1 + a)) / 2 * Math.PI * n)
+                    -Math.pow(magnitudes.get(i), 2) * (x2 / 2 - Math.sin(n * Math.PI * (x2 + a)) / 2 * Math.PI * n);
         }
         return total;
     }
@@ -54,8 +47,8 @@ public class InfiniteSquareWell extends PotentialFunction {
      * @return
      */
     @Override
-    public double eigenBasis(double x, int n) {
-        return super.getMagnitudes().get(n) * Math.sin(n * Math.PI * (x + a) / 2);
+    public double eigenBasis(double x, int n, int index) {
+        return super.getMagnitudes().get(index) * Math.sin(n * Math.PI * (x + a) / 2);
     }
 
     @Override

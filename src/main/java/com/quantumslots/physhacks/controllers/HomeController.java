@@ -1,81 +1,69 @@
 package com.quantumslots.physhacks.controllers;
 
 import com.quantumslots.physhacks.model.Player;
-import com.quantumslots.physhacks.model.Potentials;
-import com.quantumslots.physhacks.model.potentials.InfiniteSquareWell;
 import com.quantumslots.physhacks.model.potentials.PotentialFunction;
 import com.quantumslots.physhacks.service.RewardService;
-import com.quantumslots.physhacks.service.utils.PlayerUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import com.quantumslots.physhacks.service.gui.PlotService;
 
-import java.util.Objects;
 
-@Controller
 public class HomeController {
 
-    //Spring and Thymeleaf constants
-    String HOME = "index";
+    //String HOME = "index";
+    private Player player = new Player(100, -0.5f, 0.5f);
 
-    // Model components
-    private Player player;
+    private RewardService rewardService = new RewardService();
+    private PlotService plotService;
     private PotentialFunction potential;
-    private double timer;
+    private double startTime;
+    private double runTime;
+    private float timeMultiplier = 1;
 
-    // Services
-    @Autowired
-    private RewardService rewardService;
-
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String home(Model model){
-        if (Objects.isNull(player)){init();}
-        generateModel(model);
-        return HOME;
+    //@RequestMapping(value = "/", method = RequestMethod.GET)
+    public HomeController(PotentialFunction potential, PlotService plotService) {
+        changePotential(potential);
+        this.plotService = plotService;
     }
 
-    private void init() {
-        player = PlayerUtils.getDefaultPlayer();
-        potential = new InfiniteSquareWell();
-        // Initialize timer;
-    }
-
-    private void generateModel(Model model) {
-        model.addAttribute("player", player);
-    }
-
-    public String placeBet(Model model, int bet){
+    public void placeBet(int bet, float selector1, float selector2) {
         player.setBet(bet);
-        return "redirect:/";
+        player.setBudget(player.getBudget()-bet);
+        selectRange(selector1,selector2);
+        startTime();
     }
 
-    @RequestMapping()
-    public void tick(){
+    private void selectRange(float selector1, float selector2) {
+        player.setSelector1position(selector1);
+        player.setSelector2position(selector2);
     }
 
-    public void changePotential(Potentials potential){}
-
-    @RequestMapping(value = "/measure", method = RequestMethod.POST)
-    public String ROLL(Model model, @ModelAttribute("player") Player player){
-        this.player.setBet(player.getBet());
-        this.player.setSelector1position(player.getSelector1position());
-        this.player.setSelector2position(player.getSelector2position());
-        //measure(timer);
-        return "redirect:/";
+    public void startTime() {
+        startTime = System.currentTimeMillis();
     }
 
-    private void measure(double time){
-        double position = potential.makeMeasurement(time);
-        float selector1 = player.getSelector1position();
-        float selector2 = player.getSelector2position();
+    public void changePotential(PotentialFunction potential) {
+        this.potential = potential;
+    }
 
-        if (selector1 <= position && position <= selector2) {
-            // what are gains
-            int gains = rewardService.getReward(potential.getPotentialStructure(), selector1, selector2, time, player.getBet());
-            player.setBudget(player.getBudget() + gains);
+    //@RequestMapping(value = "/measure", method = RequestMethod.POST)
+    public double makeAMeasurement() {
+        runTime = System.currentTimeMillis() - startTime;
+        double position = potential.makeMeasurement((runTime) * timeMultiplier);
+        plotService.updateGraph(position);
+        updatePlayerCash(position);
+        return position;
+    }
+
+    private boolean isWin(double position) {
+        return position >= player.getSelector1position() && position <= player.getSelector2position();
+    }
+
+    private void updatePlayerCash(double position) {
+        if (isWin(position)){
+            player.setBudget(player.getBudget() + rewardService.getReward(potential.getPotentialStructure(),player.getSelector1position(),player.getSelector2position(), runTime, player.getBet()));
         }
+    }
+
+    public String getCash() {
+        return String.valueOf(player.getBudget());
     }
 }

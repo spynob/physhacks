@@ -11,30 +11,50 @@ public abstract class PotentialFunction {
     public final double HBAR = 1.05457182E-34;
     int[] boundaries = {-1, 1};
     int a = boundaries[1];
-    int L = 2 * a;
 
-    private double mass;
+    private double mass = 9.11E-31;
     private Potentials potentialStructure;
     // List holding the eigenstates used
     private ArrayList<Integer> basisFunctions;
     // List of magnitudes for each eigenstates
     private ArrayList<Double> magnitudes;
     //Default constructor. Uses groundstate eigenbasis and magnitude of 1.
+    //Constructor
     public PotentialFunction(Potentials potentialType) {
         potentialStructure = potentialType;
-        basisFunctions = new ArrayList<>(Arrays.asList(1));
-        magnitudes = new ArrayList<>(Arrays.asList(1.0));
-        mass = 1;
+        this.basisFunctions = initializeBasisFunctions();
+        this.magnitudes = initializeMagnitudes(); // make function to randomize magnitudes
         normalizeMagnitudes();
     }
-    //Constructor
-    public PotentialFunction(Potentials potentialType, ArrayList<Integer> basisFunctions, ArrayList<Double> magnitudes, double mass) {
-        potentialStructure = potentialType;
-        this.basisFunctions = basisFunctions;
-        this.magnitudes = magnitudes; // make function to randomize magnitudes
-        this.mass = mass;
-        normalizeMagnitudes();
+
+    public ArrayList<Integer> initializeBasisFunctions() {
+        ArrayList<Integer> basisFunctions = new ArrayList<>();
+        Random random = new Random();
+        int count = random.nextInt(6) + 5; // Generate a random count between 5 and 10
+
+        while (basisFunctions.size() < count) {
+            int randomNumber = random.nextInt(11); // Generate a random number between 5 and 10
+            if (!basisFunctions.contains(randomNumber)) {
+                basisFunctions.add(randomNumber);
+            }
+        }
+
+        return basisFunctions;
     }
+
+    public ArrayList<Double> initializeMagnitudes() {
+        ArrayList<Integer> basis = this.basisFunctions;
+        ArrayList<Double> magnitudes = new ArrayList<>();
+        Random random = new Random();
+
+        for (int i = 0; i < basis.size(); i++) {
+            double randomMagnitude = 0.0001 + (10 - 0.0001) * random.nextDouble();
+            magnitudes.add(randomMagnitude);
+        }
+
+        return magnitudes;
+    }
+
 
     public abstract double evaluate_probability(double x1, double x2, ArrayList<Integer> basisFunctions, ArrayList<Double> magnitudes);
 
@@ -49,8 +69,9 @@ public abstract class PotentialFunction {
      */
     public double psi_real(double x, double t){
         double total = 0;
-        for (int n : basisFunctions) {
-            total += magnitudes.get(n) * eigenBasis(x, n) * Math.cos(energy(n) * t);
+        for (int i=0; i<basisFunctions.size();i++) {
+            int n = basisFunctions.get(i);
+            total += magnitudes.get(i) * eigenBasis(x, n, i) * Math.cos(energy(n) * t);
         }
         return total;
     }
@@ -63,8 +84,9 @@ public abstract class PotentialFunction {
      */
     public double psi_imaginary(double x, double t){
         double total = 0;
-        for (int n : basisFunctions) {
-            total += magnitudes.get(n) * eigenBasis(x, n) * Math.sin(energy(n) * t);
+        for (int i=0;i<basisFunctions.size();i++) {
+            int n = basisFunctions.get(i);
+            total += magnitudes.get(i) * eigenBasis(x, n, i) * Math.sin(energy(n) * t);
         }
         return total;
     }
@@ -103,13 +125,12 @@ public abstract class PotentialFunction {
      * @param basisNumber Number determining which eigenbasis to evaluate.
      * @return
      */
-    public abstract double eigenBasis(double position, int basisNumber);
+    public abstract double eigenBasis(double position, int basisNumber, int magnitudeIndex);
 
     public abstract double energy(int basisNumber);
 
     /**
      * Makes sure the sum of the square of the magnitudes is equal to 1
-     * @return True if succeeded, false otherwise
      */
     private void normalizeMagnitudes() {
         double sum = 0;
