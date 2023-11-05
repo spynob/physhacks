@@ -18,16 +18,23 @@ import org.jfree.chart.ChartPanel;
 public class GUITest extends Application {
     private HomeController homeController;
     private TimeService timeService;
+    public GUITest() {
+        // No-argument constructor
+    }
 
-    public GUITest(HomeController homeController, TimeService timeService){
+    public GUITest(HomeController homeController, TimeService timeService) {
         this.homeController = homeController;
+        if (timeService == null) {
+            throw new IllegalArgumentException("timeService is null");
+        }
         this.timeService = timeService;
     }
+
 
     @Override
     public void start(Stage stage) {
         // Create a new JFreeChart using PlotService
-        PlotService plotService = new PlotService("", timeService);
+        PlotService plotService = new PlotService("");
         ChartPanel chartPanel = new ChartPanel(plotService.getChart());
 
         // Set the fixed dimensions for the chart
@@ -69,6 +76,13 @@ public class GUITest extends Application {
     }
 
     public static void main(String[] args) {
-        launch();
+        TimeService timeService = TimeService.getInstance(); // Obtain the TimeService instance
+
+        HomeController homeController = new HomeController(); // Initialize HomeController
+        GUITest guiTest = new GUITest(homeController, timeService); // Initialize GUITest with the TimeService instance
+
+        // Proceed with launching the JavaFX application
+        launch(args);
     }
+
 }

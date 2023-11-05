@@ -1,37 +1,28 @@
 package com.quantumslots.physhacks.service.gui;
 
-import com.quantumslots.physhacks.model.Potentials;
-import com.quantumslots.physhacks.model.potentials.PotentialFunction;
-
-import com.quantumslots.physhacks.service.TimeService;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.ui.ApplicationFrame;
-import org.jfree.chart.ui.UIUtils;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class PlotService extends ApplicationFrame {
     private XYSeries series1;
     private XYSeries series2;
     private static XYSeriesCollection dataset;
     private static JFreeChart chart;
-    private TimeService timeService; // Reference to the project-wide time management class
 
     private final float animationInterval = 1000 / 20; // Adjust the animation speed as needed
+    private double currentTime = 0.0;
 
-    public PlotService(String title, TimeService timeService) {
+    public PlotService(String title) {
         super(title);
-        this.timeService = timeService; // Set the time management class
 
         series1 = new XYSeries("Function 1");
         series2 = new XYSeries("Function 2");
@@ -71,8 +62,7 @@ public class PlotService extends ApplicationFrame {
 
         // Create a Timer to update the graph at a specific interval
         Timer graphTimer = new Timer((int) animationInterval, e -> {
-            double elapsedTime = timeService.getCurrentTimeMillis() / 1000.0; // Convert to seconds
-            updateGraph(elapsedTime);
+            updateGraph();
         });
         graphTimer.start();
     }
@@ -82,7 +72,7 @@ public class PlotService extends ApplicationFrame {
         return chart;
     }
 
-    public void updateGraph(double t) {
+    public void updateGraph() {
         series1.clear();
         series2.clear();
 
@@ -90,12 +80,14 @@ public class PlotService extends ApplicationFrame {
 
         for (int i = 0; i < numPoints; i++) {
             double x = -1.0 + (2.0 / (numPoints - 1)) * i;
-            double amplitude1 = calculateFunction1(x, t);
-            double amplitude2 = calculateFunction2(x, t);
+            double amplitude1 = calculateFunction1(x, currentTime);
+            double amplitude2 = calculateFunction2(x, currentTime);
 
             series1.add(x, amplitude1);
             series2.add(x, amplitude2);
         }
+
+        currentTime += 1.0 / 20.0; // Increment the time for the next frame
     }
 
     private double calculateFunction1(double x, double t) {
