@@ -1,11 +1,13 @@
 package com.quantumslots.physhacks.service.gui;
 
 import com.quantumslots.physhacks.controllers.HomeController;
+import com.quantumslots.physhacks.model.Player;
 import com.quantumslots.physhacks.model.potentials.InfiniteSquareWell;
 import com.quantumslots.physhacks.model.potentials.PotentialFunction;
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,16 +15,31 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import org.jfree.chart.ChartPanel;
+import javafx.scene.control.TextField;
+
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+import javafx.embed.swing.SwingNode;
 import org.jfree.chart.ChartPanel;
 import javafx.scene.control.TextField;
 
 public class GUITest extends Application {
     private HomeController homeController;
     private PlotService plotService;
-    private TextField inputField1;
+    private Label cashLabel;
+    private TextField betField;
     private TextField inputField2;
-
     private TextField inputField3;
 
     public GUITest() {
@@ -46,9 +63,13 @@ public class GUITest extends Application {
 
         StackPane leftPane = new StackPane(chartNode);
 
+        cashLabel = new Label("Cash: $" + homeController.getCash());
+        cashLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14)); // Adjust font style
+        cashLabel.setTextFill(Color.GREEN); // Adjust font color
+
         Label betLabel = new Label("Enter an amount to bet:");
-        inputField1 = new TextField();
-        inputField1.setPromptText("Enter Bet:");
+        betField = new TextField();
+        betField.setPromptText("Enter Bet:");
 
         Label boundLabel = new Label("Select a range for the bet:");
         Label leftBoundLabel = new Label("Left Bound:");
@@ -59,17 +80,21 @@ public class GUITest extends Application {
         inputField3.setPromptText("Enter right bound:");
 
         Button placeBetButton = new Button("Place Bet");
-        placeBetButton.setOnAction(e -> placeBet(inputField1.getText(), inputField2.getText(), inputField3.getText()));
+        placeBetButton.setOnAction(e -> placeBet(betField.getText(), inputField2.getText(), inputField3.getText()));
 
         VBox textFieldsPane = new VBox(
                 betLabel,
-                inputField1,
+                betField,
                 boundLabel,
                 new HBox(leftBoundLabel, inputField2),
                 new HBox(rightBoundLabel, inputField3),
                 placeBetButton
         );
         textFieldsPane.setSpacing(10);
+
+        VBox topRightPane = new VBox(cashLabel);
+        topRightPane.setSpacing(10);
+        topRightPane.setAlignment(Pos.TOP_RIGHT);
 
         Button measureButton = new Button("Make Measurement");
         measureButton.setOnAction(e -> triggerMeasure());
