@@ -55,7 +55,6 @@ public class HomeController {
     }
     public void measure(double time){
         double position = potential.makeMeasurement(time);
-        PlotService.plotVerticalLine(position);
         float selector1 = player.getSelector1position();
         float selector2 = player.getSelector2position();
 
