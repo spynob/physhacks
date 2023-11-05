@@ -46,8 +46,8 @@ public class InfiniteSquareWell extends PotentialFunction {
      * @return
      */
     @Override
-    public double eigenBasis(double x, int n) {
-        return super.getMagnitudes().get(n) * Math.sin(n * Math.PI * (x + a) / 2);
+    public double eigenBasis(double x, int n, int index) {
+        return super.getMagnitudes().get(index) * Math.sin(n * Math.PI * (x + a) / 2);
     }
 
     @Override
