@@ -11,7 +11,6 @@ public abstract class PotentialFunction {
     public final double HBAR = 1.05457182E-34;
     int[] boundaries = {-1, 1};
     int a = boundaries[1];
-    int L = 2 * a;
 
     private double mass;
     private Potentials potentialStructure;
