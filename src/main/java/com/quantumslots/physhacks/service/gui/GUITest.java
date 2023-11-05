@@ -1,7 +1,6 @@
 package com.quantumslots.physhacks.service.gui;
 
 import com.quantumslots.physhacks.controllers.HomeController;
-import com.quantumslots.physhacks.model.Potentials;
 import com.quantumslots.physhacks.model.potentials.InfiniteSquareWell;
 import com.quantumslots.physhacks.model.potentials.PotentialFunction;
 import javafx.application.Application;
@@ -17,10 +16,10 @@ import javafx.stage.Stage;
 import org.jfree.chart.ChartPanel;
 
 
-
 public class GUITest extends Application {
     private HomeController homeController;
     private PlotService plotService;
+
     public GUITest() {
         PotentialFunction potential = new InfiniteSquareWell();
         plotService = new PlotService("", potential);
@@ -79,10 +78,6 @@ public class GUITest extends Application {
 
     private void triggerMeasure() {
         double position = homeController.makeAMeasurement();
-        plotService.updateGraph(position);
-        if (homeController.isWin(position)){
-            // handle win
-        }
     }
 
     public static void main(String[] args) {

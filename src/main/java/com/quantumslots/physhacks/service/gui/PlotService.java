@@ -112,12 +112,12 @@ public class PlotService extends ApplicationFrame {
 
     private double calculateFunction1(double x, double t) {
         // Replace this with your first function calculation
-        return Math.sin(2.0 * Math.PI * x) * Math.cos(2 * Math.PI * t);
+        return potential.psi_real(x, t);
     }
 
     private double calculateFunction2(double x, double t) {
         // Replace this with your second function calculation
-        return Math.cos(2.0 * Math.PI * x) * Math.sin(2 * Math.PI * t);
+        return potential.psi_imaginary(x, t);
     }
 
     private double collapse_wavefunction(double x, double position) {
