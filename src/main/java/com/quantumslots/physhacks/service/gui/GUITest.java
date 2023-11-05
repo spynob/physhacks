@@ -65,19 +65,23 @@ public class GUITest extends Application {
         StackPane leftPane = new StackPane(chartNode);
 
         Label betLabel = new Label("Enter an amount to bet:");
+        betLabel.setTextFill(Color.WHITE);
         betField = new TextField();
         betField.setPromptText("Enter Bet:");
 
         Label boundLabel = new Label("Select a range for the bet:");
         Label leftBoundLabel = new Label("Left Bound:");
+        boundLabel.setTextFill(Color.WHITE);
+        leftBoundLabel.setTextFill(Color.WHITE);
         inputField2 = new TextField();
         inputField2.setPromptText("Enter left bound:");
         Label rightBoundLabel = new Label("Right Bound:");
+        rightBoundLabel.setTextFill(Color.WHITE);
         inputField3 = new TextField();
         inputField3.setPromptText("Enter right bound:");
 
         Button placeBetButton = new Button("Place Bet");
-        placeBetButton.setOnAction(e -> placeBet(betField.getText(), inputField2.getText(), inputField3.getText()));
+        placeBetButton.setOnAction(e -> placeBet(betField.getText(), inputField2.getText(), inputField3.getText(), cashLabel));
 
         VBox textFieldsPane = new VBox(
                 betLabel,
@@ -93,7 +97,7 @@ public class GUITest extends Application {
         VBox cashPane = new VBox();
         cashLabel = new Label("Cash: $" + homeController.getCash());
         cashLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        cashLabel.setTextFill(Color.GOLDENROD);
+        cashLabel.setTextFill(Color.WHITE);
         cashPane.getChildren().add(cashLabel);
 
         // Create an HBox for the cash label and position it in the bottom-right corner
@@ -101,7 +105,7 @@ public class GUITest extends Application {
         bottomRightPane.setAlignment(Pos.BOTTOM_RIGHT);
 
         Button measureButton = new Button("Make Measurement");
-        measureButton.setOnAction(e -> triggerMeasure());
+        measureButton.setOnAction(e -> triggerMeasure(cashLabel));
 
         HBox chartAndTextFields = new HBox(leftPane, textFieldsPane);
         chartAndTextFields.setPadding(new Insets(10));
@@ -133,12 +137,14 @@ public class GUITest extends Application {
         stage.show();
     }
 
-    private void triggerMeasure() {
+    private void triggerMeasure(Label cashLabel) {
         double position = homeController.makeAMeasurement();
+        cashLabel.setText("Cash: $" + homeController.getCash());
     }
 
-    private void placeBet(String bet, String leftBound, String rightBound) {
+    private void placeBet(String bet, String leftBound, String rightBound, Label cashLabel) {
         homeController.placeBet(Integer.parseInt(bet), Float.parseFloat(leftBound), Float.parseFloat(rightBound));
+        cashLabel.setText("Cash: $" + homeController.getCash());
     }
 
     public static void main(String[] args) {
