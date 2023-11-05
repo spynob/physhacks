@@ -1,18 +1,22 @@
 package com.quantumslots.physhacks.service;
 
 import com.quantumslots.physhacks.model.Potentials;
+import org.springframework.stereotype.Service;
 
 import java.lang.Math;
 
+import static com.quantumslots.physhacks.model.Potentials.InfiniteSquareWell;
+import static com.quantumslots.physhacks.model.Potentials.StepPotential;
 
+@Service
 public class RewardService {
 
-    public static float distanceScale(float s, float r){
-        return (float) (15*Math.exp(-15*(r/s)) +1);
+    public static float distanceScale(float s, float r) {
+        return (float) (15 * Math.exp(-15 * (r / s)) + 1);
     }
 
-    public static float timeScale(double time, float r){
-        return (float) ((float) 1 / (250*Math.pow(r,0.5)) * Math.pow(time, 3.5)) + 1;
+    public static float timeScale(double time, float r) {
+        return (float) ((float) 1 / (250 * Math.pow(r, 0.5)) * Math.pow(time, 3.5)) + 1;
 
 
         //if (tScale > 5) tScale = (float) (1000 * Math.exp(-0.8*time) + 1);
@@ -30,13 +34,12 @@ public class RewardService {
 
 
     //add speed factor
-    public static int getReward(Potentials potential, float selector1, float selector2, double time, int bet){
+    public static int getReward(Potentials potential, float selector1, float selector2, double time, int bet) {
         float reward;
         float range = Math.abs(selector1 - selector2);
         float screen = 10;
 
-    public int getReward(Potentials potential, float selector1, float selector2, double time, int bet){
-        switch (potential){
+        switch (potential) {
             case InfiniteSquareWell:
                 time = 1;
 
@@ -44,17 +47,14 @@ public class RewardService {
                 //reward = bet + (bet * (1+time/5) * rewardFunction(screen, range))/2;
 
                 return Math.round(reward);
-            default:
-                throw new IllegalArgumentException("Potential not handled");
-
             case StepPotential:
                 reward = bet * timeScale(time, range) * distanceScale(screen, range);
 
                 return Math.round(reward);
+            default:
+                throw new IllegalArgumentException("Potential not handled");
         }
     }
-
-
 }
 
 

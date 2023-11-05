@@ -3,9 +3,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Quantum Slots</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" media="all"
-          href="../../css/gtvg.css" th:href="@{/css/gtvg.css}" />
+          href="../../css/gtvg.css" th:href="@{/css/gtvg.css}"/>
     <link rel="stylesheet" type="text/css" href="styles/sliderStyle.css" th:href="@{/styles/sliderStyle.css}">
 </head>
 <style th:inline="css">
@@ -87,6 +87,7 @@ input[type="range"] {
   height: 0;
   z-index: 1;
 }
+
 </style>
 <body>
 <div>
@@ -99,14 +100,20 @@ input[type="range"] {
     </div>
     <div class="form_control">
         <form th:action="@{/measure}" action="#" method="post" th:object="${player}">
-        <div class="form_control_container">
-            <div class="form_control_container__time">Min</div>
-            <input class="form_control_container__time__input" type="number" id="fromInput" th:value="*{selector1position}" value="-100" min="-100" max="100"/>
-        </div>
-        <div class="form_control_container">
-            <div class="form_control_container__time">Max</div>
-            <input class="form_control_container__time__input" type="number" id="toInput" th:value="*{selector2position}" value="100" min="-100" max="100" />
-        </div>
+            <div class="form_control_container">
+                <div class="form_control_container__time">Min</div>
+                <input class="form_control_container__time__input" type="number" id="fromInput"
+                       th:value="*{selector1position}" value="-100" min="-100" max="100"/>
+            </div>
+            <div class="form_control_container">
+                <div class="form_control_container__time">Max</div>
+                <input class="form_control_container__time__input" type="number" id="toInput"
+                       th:value="*{selector2position}" value="100" min="-100" max="100"/>
+            </div>
+            <div>
+                <input type="number" th:value="*{bet}">
+                <input type="number" th:value="*{budget}">
+            </div>
             <input type="submit" value="MEASURE!">
         </form>
     </div>
@@ -200,5 +207,6 @@ fromSlider.oninput = () => controlFromSlider(fromSlider, toSlider, fromInput);
 toSlider.oninput = () => controlToSlider(fromSlider, toSlider, toInput);
 fromInput.oninput = () => controlFromInput(fromSlider, fromInput, toInput, toSlider);
 toInput.oninput = () => controlToInput(toSlider, fromInput, toInput, toSlider);
+
 </script>
 </html>

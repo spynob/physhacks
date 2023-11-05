@@ -1,9 +1,13 @@
 package com.quantumslots.physhacks.model;
 
+import lombok.extern.apachecommons.CommonsLog;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 public class Player {
-    private int budget=100;
-    private float selector1position;
-    private float selector2position;
+    private int budget=0;
+    private float selector1position=0;
+    private float selector2position=0;
     private int bet=0;
 
     public int getBet() {
@@ -15,12 +19,6 @@ public class Player {
             throw new IllegalArgumentException("Not a valid bet");
         }
         this.bet = bet;
-    }
-
-    public Player(int budget, float selector1position, float selector2) {
-        this.budget = budget;
-        this.selector1position = selector1position;
-        this.selector2position = selector2;
     }
 
     public int getBudget() {
