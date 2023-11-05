@@ -62,4 +62,8 @@ public class HomeController {
             player.setBudget(player.getBudget() + rewardService.getReward(potential.getPotentialStructure(),player.getSelector1position(),player.getSelector2position(), runTime, player.getBet()));
         }
     }
+
+    public String getCash() {
+        return String.valueOf(player.getBudget());
+    }
 }

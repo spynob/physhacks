@@ -12,26 +12,18 @@ public abstract class PotentialFunction {
     int[] boundaries = {-1, 1};
     int a = boundaries[1];
 
-    private double mass;
+    private double mass = 9.11E-31;
     private Potentials potentialStructure;
     // List holding the eigenstates used
     private ArrayList<Integer> basisFunctions;
     // List of magnitudes for each eigenstates
     private ArrayList<Double> magnitudes;
     //Default constructor. Uses groundstate eigenbasis and magnitude of 1.
-    public PotentialFunction(Potentials potentialType) {
-        potentialStructure = potentialType;
-        basisFunctions = new ArrayList<>(Arrays.asList(1));
-        magnitudes = new ArrayList<>(Arrays.asList(1.0));
-        mass = 1;
-        normalizeMagnitudes();
-    }
     //Constructor
-    public PotentialFunction(Potentials potentialType, double mass) {
+    public PotentialFunction(Potentials potentialType) {
         potentialStructure = potentialType;
         this.basisFunctions = initializeBasisFunctions();
         this.magnitudes = initializeMagnitudes(); // make function to randomize magnitudes
-        this.mass = mass;
         normalizeMagnitudes();
     }
 
@@ -77,8 +69,9 @@ public abstract class PotentialFunction {
      */
     public double psi_real(double x, double t){
         double total = 0;
-        for (int n : basisFunctions) {
-            total += magnitudes.get(n) * eigenBasis(x, n) * Math.cos(energy(n) * t);
+        for (int i=0; i<basisFunctions.size();i++) {
+            int n = basisFunctions.get(i);
+            total += magnitudes.get(i) * eigenBasis(x, n, i) * Math.cos(energy(n) * t);
         }
         return total;
     }
@@ -91,8 +84,9 @@ public abstract class PotentialFunction {
      */
     public double psi_imaginary(double x, double t){
         double total = 0;
-        for (int n : basisFunctions) {
-            total += magnitudes.get(n) * eigenBasis(x, n) * Math.sin(energy(n) * t);
+        for (int i=0;i<basisFunctions.size();i++) {
+            int n = basisFunctions.get(i);
+            total += magnitudes.get(i) * eigenBasis(x, n, i) * Math.sin(energy(n) * t);
         }
         return total;
     }
@@ -131,7 +125,7 @@ public abstract class PotentialFunction {
      * @param basisNumber Number determining which eigenbasis to evaluate.
      * @return
      */
-    public abstract double eigenBasis(double position, int basisNumber);
+    public abstract double eigenBasis(double position, int basisNumber, int magnitudeIndex);
 
     public abstract double energy(int basisNumber);
 
