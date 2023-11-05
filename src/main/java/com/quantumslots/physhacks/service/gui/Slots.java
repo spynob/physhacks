@@ -73,7 +73,7 @@ public class Slots extends Application {
                 )*/
         //);
 
-        return cylinder;
+        return cylinder;//
     }
 
 
