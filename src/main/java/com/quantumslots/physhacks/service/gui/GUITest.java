@@ -23,6 +23,8 @@ public class GUITest extends Application {
     private TextField inputField1;
     private TextField inputField2;
 
+    private TextField inputField3;
+
     public GUITest() {
         PotentialFunction potential = new InfiniteSquareWell();
         plotService = new PlotService("", potential);
@@ -49,13 +51,16 @@ public class GUITest extends Application {
         Label instructionLabel3 = new Label("the particle will be and place your bet!");
 
         inputField1 = new TextField();
-        inputField1.setPromptText("Enter left bound: ");
+        inputField1.setPromptText("Enter Bet: ");
 
         inputField2 = new TextField();
-        inputField2.setPromptText("Enter right bound: ");
+        inputField2.setPromptText("Enter left bound: ");
+
+        inputField3 = new TextField();
+        inputField3.setPromptText("Enter right bound: ");
 
         Button placeBetButton = new Button("Place Bet");
-        placeBetButton.setOnAction(e -> placeBet(inputField1.getText(), inputField2.getText()));
+        placeBetButton.setOnAction(e -> placeBet(inputField1.getText(), inputField2.getText(), inputField3.getText()));
 
         VBox textFieldsPane = new VBox(
                 new VBox(instructionLabel1, instructionLabel2, instructionLabel3, inputField1),
@@ -88,8 +93,8 @@ public class GUITest extends Application {
         double position = homeController.makeAMeasurement();
     }
 
-    private void placeBet(String leftBound, String rightBound) {
-        // Handle the bet placement using leftBound and rightBound
+    private void placeBet(String bet, String leftBound, String rightBound) {
+        homeController.placeBet(Integer.parseInt(bet), Float.parseFloat(leftBound),Float.parseFloat(rightBound));
     }
 
     public static void main(String[] args) {
