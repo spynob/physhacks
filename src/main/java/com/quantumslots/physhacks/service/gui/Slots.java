@@ -63,6 +63,9 @@ public class Slots extends Application {
         Cylinder cylinder = new Cylinder(40, 120);
         cylinder.setTranslateY(-60);
         cylinder.setTranslateZ(-60);
+        cylinder.setRotate(90);
+
+
 
         PhongMaterial material = new PhongMaterial();
         material.setDiffuseColor(Color.BLUE);
@@ -91,9 +94,9 @@ public class Slots extends Application {
     }
 
     private RotateTransition createRotateTransition(Cylinder slot) {
-        RotateTransition rotate = new RotateTransition(Duration.seconds(3), slot);
+        RotateTransition rotate = new RotateTransition(Duration.seconds(0.3), slot);
         rotate.setByAngle(360); // Rotate 360 degrees
-        rotate.setCycleCount(100); // Rotate once
+        rotate.setCycleCount(20); // Rotate once
         rotate.setInterpolator(Interpolator.LINEAR);
         rotate.setAxis(Rotate.X_AXIS);
         return rotate;

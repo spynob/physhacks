@@ -12,9 +12,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -112,6 +111,18 @@ public class GUITest extends Application {
         buttonPane.setPadding(new Insets(10));
 
         VBox root = new VBox(chartAndTextFields, buttonPane, bottomRightPane);
+
+        Image gifImage = new Image("slots.gif");
+        ImageView gifImageView = new ImageView(gifImage);
+        /*VBox slots = new VBox(gifImageView);
+        Pane spacer = new Pane();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+        spacer.setMinSize(10, 10);
+        root.getChildren().addAll(spacer, gifImageView);*/
+
+        root.setStyle("-fx-background-image: url(https://i.pinimg.com/originals/81/08/21/8108217a695b537f4641d717bf5b2233.jpg); " +
+                "-fx-background-size: cover;");
+
 
         Scene scene = new Scene(root, 800, 600);
 
