@@ -1,24 +1,26 @@
 package com.quantumslots.physhacks.service.gui;
 
-import com.quantumslots.physhacks.controllers.HomeController;
-import com.quantumslots.physhacks.model.potentials.PotentialFunction;
-import com.quantumslots.physhacks.service.TimeService;
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jfree.chart.ChartPanel;
+import com.quantumslots.physhacks.controllers.HomeController;
+import com.quantumslots.physhacks.model.potentials.PotentialFunction;
+import com.quantumslots.physhacks.service.TimeService;
+
 
 public class GUITest extends Application {
     private HomeController homeController;
     private TimeService timeService;
     private PotentialFunction potential;
-    private PlotService plotService; // Add a PlotService instance variable
+    private PlotService plotService;
 
     public GUITest() {
         // No-argument constructor
@@ -39,6 +41,12 @@ public class GUITest extends Application {
         plotService = new PlotService("", potential); // Pass the potential function
         ChartPanel chartPanel = new ChartPanel(plotService.getChart());
 
+        // Load the icon image from the project directory
+        Image icon = new Image("file:src/main/resources/images/icon.png"); // Replace 'icon.png' with the path to your icon image
+
+        // Set the window icon for the stage
+        stage.getIcons().add(icon); // Use 'stage' to set the icon
+
         // Set the fixed dimensions for the chart
         chartPanel.setPreferredSize(new java.awt.Dimension(550, 400)); // You can adjust the dimensions as needed
 
@@ -51,7 +59,9 @@ public class GUITest extends Application {
 
         // Create a button and add an action to call the updateGraph method with "collapse_wavefunction"
         Button measureButton = new Button("Make Measurement");
-        measureButton.setOnAction(e -> plotService.updateGraph(); // Update the graph
+        measureButton.setOnAction(e -> {
+            plotService.updateGraph(); // Update the graph
+        });
 
         // Create a VBox to organize the button and text
         VBox rightPane = new VBox(measureButton);

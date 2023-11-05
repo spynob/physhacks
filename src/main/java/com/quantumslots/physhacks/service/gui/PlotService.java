@@ -67,7 +67,7 @@ public class PlotService extends ApplicationFrame {
 
         // Create a Timer to update the graph at a specific interval
         Timer graphTimer = new Timer((int) animationInterval, e -> {
-            updateGraph(false);
+            updateGraph();
         });
         graphTimer.start();
     }
