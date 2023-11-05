@@ -9,84 +9,95 @@ import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jfree.chart.ChartPanel;
-
-
+import javafx.scene.control.TextField;
 
 public class GUITest extends Application {
     private HomeController homeController;
     private PlotService plotService;
+    private TextField inputField1;
+    private TextField inputField2;
+
     public GUITest() {
         PotentialFunction potential = new InfiniteSquareWell();
         plotService = new PlotService("", potential);
         homeController = new HomeController(potential, plotService);
     }
 
-
     @Override
     public void start(Stage stage) {
-        // Create a new JFreeChart using PlotService
         ChartPanel chartPanel = new ChartPanel(plotService.getChart());
 
-        // Load the icon image from the project directory
-        Image icon = new Image("file:src/main/resources/images/icon.png"); // Replace 'icon.png' with the path to your icon image
+        Image icon = new Image("file:src/main/resources/images/icon.png");
 
-        // Set the window icon for the stage
-        stage.getIcons().add(icon); // Use 'stage' to set the icon
+        stage.getIcons().add(icon);
 
-        // Set the fixed dimensions for the chart
-        chartPanel.setPreferredSize(new java.awt.Dimension(550, 400)); // You can adjust the dimensions as needed
+        chartPanel.setPreferredSize(new java.awt.Dimension(550, 400));
 
-        // Create a SwingNode to embed the JFreeChart
         SwingNode chartNode = new SwingNode();
         chartNode.setContent(chartPanel);
 
-        // Create a StackPane layout to center the chart on the left
         StackPane leftPane = new StackPane(chartNode);
 
-        // Create a button and add an action to call the updateGraph method with "collapse_wavefunction"
+        Label instructionLabel1 = new Label("Enter a number between -1 and 1");
+        Label instructionLabel2 = new Label("to select the range where you think");
+        Label instructionLabel3 = new Label("the particle will be and place your bet!");
+
+        inputField1 = new TextField();
+        inputField1.setPromptText("Enter left bound: ");
+
+        inputField2 = new TextField();
+        inputField2.setPromptText("Enter right bound: ");
+
+        Button placeBetButton = new Button("Place Bet");
+        placeBetButton.setOnAction(e -> placeBet(inputField1.getText(), inputField2.getText()));
+
+        VBox textFieldsPane = new VBox(
+                new VBox(instructionLabel1, instructionLabel2, instructionLabel3, inputField1),
+                new VBox(inputField2, placeBetButton)
+        );
+        textFieldsPane.setSpacing(10);
+
         Button measureButton = new Button("Make Measurement");
         measureButton.setOnAction(e -> triggerMeasure());
 
+        HBox chartAndTextFields = new HBox(leftPane, textFieldsPane);
+        chartAndTextFields.setPadding(new Insets(10));
+        chartAndTextFields.setSpacing(10);
 
-        // Create a VBox to organize the button and text
-        VBox rightPane = new VBox(measureButton);
-        rightPane.setSpacing(10); // Add spacing between button and text
+        HBox buttonPane = new HBox(measureButton);
+        buttonPane.setPadding(new Insets(10));
 
-        // Create an HBox to hold both the chart and the right components
-        HBox root = new HBox(leftPane, rightPane);
+        VBox root = new VBox(chartAndTextFields, buttonPane);
 
-        // Add padding to separate the chart from other components
-        root.setPadding(new Insets(10));
-
-        // Create the scene
         Scene scene = new Scene(root, 800, 600);
 
-        // Set the title
         stage.setTitle("Schrödinger's Slot Machine");
 
-        // Set the scene to the stage
         stage.setScene(scene);
 
-        // Show the stage
         stage.show();
     }
 
     private void triggerMeasure() {
         double position = homeController.makeAMeasurement();
         plotService.updateGraph(position);
-        if (homeController.isWin(position)){
-            // handle win
+        if (homeController.isWin(position)) {
+            // Handle win
         }
     }
 
+    private void placeBet(String leftBound, String rightBound) {
+        // Handle the bet placement using leftBound and rightBound
+    }
+
     public static void main(String[] args) {
-        // Proceed with launching the JavaFX application
         launch(args);
     }
 }
