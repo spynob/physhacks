@@ -1,5 +1,9 @@
 package com.quantumslots.physhacks.service.gui;
 
+import com.quantumslots.physhacks.controllers.HomeController;
+import com.quantumslots.physhacks.model.Potentials;
+import com.quantumslots.physhacks.service.TimeService;
+import com.quantumslots.physhacks.service.gui.PlotService;
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
@@ -18,27 +22,16 @@ import com.quantumslots.physhacks.service.TimeService;
 
 public class GUITest extends Application {
     private HomeController homeController;
-    private TimeService timeService;
-    private PotentialFunction potential;
     private PlotService plotService;
-
     public GUITest() {
-        // No-argument constructor
+        plotService = new PlotService("");
+        homeController = new HomeController(Potentials.InfiniteSquareWell, plotService);
     }
 
-    public GUITest(HomeController homeController, TimeService timeService, PotentialFunction potential) {
-        this.homeController = homeController;
-        if (timeService == null) {
-            throw new IllegalArgumentException("timeService is null");
-        }
-        this.timeService = timeService;
-        this.potential = potential;
-    }
 
     @Override
     public void start(Stage stage) {
-        // Create a new JFreeChart using PlotService with PotentialFunction
-        plotService = new PlotService("", potential); // Pass the potential function
+        // Create a new JFreeChart using PlotService
         ChartPanel chartPanel = new ChartPanel(plotService.getChart());
 
         // Load the icon image from the project directory
@@ -59,9 +52,8 @@ public class GUITest extends Application {
 
         // Create a button and add an action to call the updateGraph method with "collapse_wavefunction"
         Button measureButton = new Button("Make Measurement");
-        measureButton.setOnAction(e -> {
-            plotService.updateGraph(); // Update the graph
-        });
+        measureButton.setOnAction(e -> triggerMeasure());
+
 
         // Create a VBox to organize the button and text
         VBox rightPane = new VBox(measureButton);
@@ -86,10 +78,11 @@ public class GUITest extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) {
-        TimeService timeService = TimeService.getInstance(); // Obtain the TimeService instance
+    private void triggerMeasure() {
+        double position = homeController.makeAMeasurement();
+    }
 
-        HomeController homeController = new HomeController(); // Initialize HomeController
+    public static void main(String[] args) {
         // Proceed with launching the JavaFX application
         launch(args);
     }

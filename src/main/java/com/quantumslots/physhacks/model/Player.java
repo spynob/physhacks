@@ -1,7 +1,7 @@
 package com.quantumslots.physhacks.model;
 
 public class Player {
-    private int budget=100;
+    private int budget;
     private float selector1position;
     private float selector2position;
     private int bet=0;
@@ -17,10 +17,10 @@ public class Player {
         this.bet = bet;
     }
 
-    public Player(int budget, float selector1position, float selector2) {
+    public Player(int budget, float selector1position, float selector2position) {
         this.budget = budget;
         this.selector1position = selector1position;
-        this.selector2position = selector2;
+        this.selector2position = selector2position;
     }
 
     public int getBudget() {
