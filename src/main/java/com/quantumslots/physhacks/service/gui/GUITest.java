@@ -1,88 +1,106 @@
 package com.quantumslots.physhacks.service.gui;
 
 import com.quantumslots.physhacks.controllers.HomeController;
-import com.quantumslots.physhacks.service.TimeService;
-import com.quantumslots.physhacks.service.gui.PlotService;
+import com.quantumslots.physhacks.model.potentials.InfiniteSquareWell;
+import com.quantumslots.physhacks.model.potentials.PotentialFunction;
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import org.jfree.chart.ChartPanel;
+import javafx.scene.control.TextField;
 
 public class GUITest extends Application {
     private HomeController homeController;
-    private TimeService timeService;
+    private PlotService plotService;
+    private TextField inputField1;
+    private TextField inputField2;
+
+    private TextField inputField3;
+
     public GUITest() {
-        // No-argument constructor
+        PotentialFunction potential = new InfiniteSquareWell();
+        plotService = new PlotService("", potential);
+        homeController = new HomeController(potential, plotService);
     }
-
-    public GUITest(HomeController homeController, TimeService timeService) {
-        this.homeController = homeController;
-        if (timeService == null) {
-            throw new IllegalArgumentException("timeService is null");
-        }
-        this.timeService = timeService;
-    }
-
 
     @Override
     public void start(Stage stage) {
-        // Create a new JFreeChart using PlotService
-        PlotService plotService = new PlotService("");
         ChartPanel chartPanel = new ChartPanel(plotService.getChart());
 
-        // Set the fixed dimensions for the chart
-        chartPanel.setPreferredSize(new java.awt.Dimension(550, 400)); // You can adjust the dimensions as needed
+        Image icon = new Image("file:src/main/resources/images/icon.png");
 
-        // Create a SwingNode to embed the JFreeChart
+        stage.getIcons().add(icon);
+
+        chartPanel.setPreferredSize(new java.awt.Dimension(550, 400));
+
         SwingNode chartNode = new SwingNode();
         chartNode.setContent(chartPanel);
 
-        // Create a StackPane layout to center the chart on the left
         StackPane leftPane = new StackPane(chartNode);
 
-        // Create a button and add an action to call the measure() method in HomeController
+        Label betLabel = new Label("Enter an amount to bet:");
+        inputField1 = new TextField();
+        inputField1.setPromptText("Enter Bet:");
+
+        Label boundLabel = new Label("Select a range for the bet:");
+        Label leftBoundLabel = new Label("Left Bound:");
+        inputField2 = new TextField();
+        inputField2.setPromptText("Enter left bound:");
+        Label rightBoundLabel = new Label("Right Bound:");
+        inputField3 = new TextField();
+        inputField3.setPromptText("Enter right bound:");
+
+        Button placeBetButton = new Button("Place Bet");
+        placeBetButton.setOnAction(e -> placeBet(inputField1.getText(), inputField2.getText(), inputField3.getText()));
+
+        VBox textFieldsPane = new VBox(
+                betLabel,
+                inputField1,
+                boundLabel,
+                new HBox(leftBoundLabel, inputField2),
+                new HBox(rightBoundLabel, inputField3),
+                placeBetButton
+        );
+        textFieldsPane.setSpacing(10);
+
         Button measureButton = new Button("Make Measurement");
-        measureButton.setOnAction(e -> homeController.measure(timeService.getCurrentTimeMillis() / 1000.0));
+        measureButton.setOnAction(e -> triggerMeasure());
 
+        HBox chartAndTextFields = new HBox(leftPane, textFieldsPane);
+        chartAndTextFields.setPadding(new Insets(10));
+        chartAndTextFields.setSpacing(10);
 
-        // Create a VBox to organize the button and text
-        VBox rightPane = new VBox(measureButton);
-        rightPane.setSpacing(10); // Add spacing between button and text
+        HBox buttonPane = new HBox(measureButton);
+        buttonPane.setPadding(new Insets(10));
 
-        // Create an HBox to hold both the chart and the right components
-        HBox root = new HBox(leftPane, rightPane);
+        VBox root = new VBox(chartAndTextFields, buttonPane);
 
-        // Add padding to separate the chart from other components
-        root.setPadding(new Insets(10));
-
-        // Create the scene
         Scene scene = new Scene(root, 800, 600);
 
-        // Set the title
         stage.setTitle("Schrödinger's Slot Machine");
 
-        // Set the scene to the stage
         stage.setScene(scene);
 
-        // Show the stage
         stage.show();
     }
 
-    public static void main(String[] args) {
-        TimeService timeService = TimeService.getInstance(); // Obtain the TimeService instance
-
-        HomeController homeController = new HomeController(); // Initialize HomeController
-        GUITest guiTest = new GUITest(homeController, timeService); // Initialize GUITest with the TimeService instance
-
-        // Proceed with launching the JavaFX application
-        launch(args);
+    private void triggerMeasure() {
+        double position = homeController.makeAMeasurement();
     }
 
+    private void placeBet(String bet, String leftBound, String rightBound) {
+        homeController.placeBet(Integer.parseInt(bet), Float.parseFloat(leftBound),Float.parseFloat(rightBound));
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 }

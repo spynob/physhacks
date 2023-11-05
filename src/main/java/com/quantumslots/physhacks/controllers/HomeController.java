@@ -1,68 +1,65 @@
 package com.quantumslots.physhacks.controllers;
 
 import com.quantumslots.physhacks.model.Player;
-import com.quantumslots.physhacks.model.Potentials;
 import com.quantumslots.physhacks.model.potentials.PotentialFunction;
 import com.quantumslots.physhacks.service.RewardService;
 import com.quantumslots.physhacks.service.gui.PlotService;
-import com.quantumslots.physhacks.service.utils.PlayerUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import com.quantumslots.physhacks.service.utils.PlayerUtils;
 
-@Controller
+
 public class HomeController {
 
-    String HOME = "index";
-    private Player player;
-    @Autowired
-    private RewardService rewardService;
+    //String HOME = "index";
+    private Player player = new Player(100, -0.5f, 0.5f);
+
+    private RewardService rewardService = new RewardService();
+    private PlotService plotService;
     private PotentialFunction potential;
+    private double startTime;
+    private double runTime;
+    private float timeMultiplier = 1;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String init(Model model){
-        player = PlayerUtils.getDefaultPlayer();
-        generateModel(model);
-        return HOME;
+    //@RequestMapping(value = "/", method = RequestMethod.GET)
+    public HomeController(PotentialFunction potential, PlotService plotService) {
+        changePotential(potential);
+        this.plotService = plotService;
     }
 
-    public void placeBet(int bet){
+    public void placeBet(int bet, float selector1, float selector2) {
         player.setBet(bet);
+        player.setBudget(player.getBudget()-bet);
+        selectRange(selector1,selector2);
+        startTime();
     }
 
-    public void selectRange(float selector1, float selector2){
+    private void selectRange(float selector1, float selector2) {
+        player.setSelector1position(selector1);
+        player.setSelector2position(selector2);
     }
 
-    public void tick(){
-
+    public void startTime() {
+        startTime = System.currentTimeMillis();
     }
 
-    public void changePotential(Potentials potential){}
-
-    @RequestMapping(value = "/measure", method = RequestMethod.POST)
-    public String measure(Model model, @ModelAttribute Player newPlayerProfile){
-        player.setSelector1position(newPlayerProfile.getSelector1position());
-        player.setSelector2position(newPlayerProfile.getSelector2position());
-        return HOME;
+    public void changePotential(PotentialFunction potential) {
+        this.potential = potential;
     }
 
-    private void generateModel(Model model){
-        model.addAttribute("player", player);
+    //@RequestMapping(value = "/measure", method = RequestMethod.POST)
+    public double makeAMeasurement() {
+        runTime = System.currentTimeMillis() - startTime;
+        double position = potential.makeMeasurement((runTime) * timeMultiplier);
+        plotService.updateGraph(position);
+        playerWins(position);
+        return position;
     }
-    public void measure(double time){
-        double position = potential.makeMeasurement(time);
-        PlotService.plotVerticalLine(position);
-        float selector1 = player.getSelector1position();
-        float selector2 = player.getSelector2position();
 
-        if (selector1 <= position && position <= selector2) {
-            // what are gains
-            int gains = rewardService.getReward(potential.getPotentialStructure(), selector1, selector2, time, player.getBet());
-            player.setBudget(player.getBudget() + gains);
+    private boolean isWin(double position) {
+        return position >= player.getSelector1position() && position <= player.getSelector2position();
+    }
+
+    private void playerWins(double position) {
+        if (isWin(position)){
+            player.setBudget(player.getBudget() + rewardService.getReward(potential.getPotentialStructure(),player.getSelector1position(),player.getSelector2position(), runTime, player.getBet()));
         }
     }
 }
