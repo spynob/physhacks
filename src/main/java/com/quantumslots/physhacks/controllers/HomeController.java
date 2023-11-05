@@ -52,6 +52,7 @@ public class HomeController {
     }
 
     public void changePotential(Potentials potential){}
+
     @RequestMapping(value = "/measure", method = RequestMethod.POST)
     public String ROLL(Model model, @ModelAttribute("player") Player player){
         player.setBudget(player.getBudget());
