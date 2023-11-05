@@ -4,6 +4,7 @@ import com.quantumslots.physhacks.model.Player;
 import com.quantumslots.physhacks.model.Potentials;
 import com.quantumslots.physhacks.model.potentials.PotentialFunction;
 import com.quantumslots.physhacks.service.RewardService;
+import com.quantumslots.physhacks.service.gui.PlotService;
 import com.quantumslots.physhacks.service.utils.PlayerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -54,6 +55,7 @@ public class HomeController {
     }
     public void measure(double time){
         double position = potential.makeMeasurement(time);
+        PlotService.plotVerticalLine(position);
         float selector1 = player.getSelector1position();
         float selector2 = player.getSelector2position();
 

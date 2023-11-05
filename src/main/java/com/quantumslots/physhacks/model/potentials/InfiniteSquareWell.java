@@ -1,9 +1,6 @@
 package com.quantumslots.physhacks.model.potentials;
 
-
-
 import com.quantumslots.physhacks.model.Potentials;
-
 import java.util.ArrayList;
 
 
