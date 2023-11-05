@@ -27,7 +27,7 @@ public abstract class PotentialFunction {
         normalizeMagnitudes();
     }
     //Constructor
-    public PotentialFunction(Potentials potentialType, ArrayList<Integer> basisFunctions, ArrayList<Double> magnitudes, double mass) {
+    public PotentialFunction(Potentials potentialType, double mass) {
         potentialStructure = potentialType;
         this.basisFunctions = initializeBasisFunctions();
         this.magnitudes = initializeMagnitudes(); // make function to randomize magnitudes
