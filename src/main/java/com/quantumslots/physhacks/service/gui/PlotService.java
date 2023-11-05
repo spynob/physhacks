@@ -2,6 +2,7 @@ package com.quantumslots.physhacks.service.gui;
 
 import com.quantumslots.physhacks.model.potentials.PotentialFunction;
 
+import javafx.embed.swing.SwingNode;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -18,21 +19,26 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class PlotService extends ApplicationFrame {
+public class PlotService extends JComponent {
     private XYSeries series1;
     private XYSeries series2;
     private XYSeriesCollection dataset;
     private JFreeChart chart;
     private double timer = 0;
+
+
     private final float animationInterval = 1000 / 20; // Adjust the animation speed as needed
-            public PlotService(String title) {
-            super(title);
+            public PlotService() {
+            ;
 
             series1 = new XYSeries("Function 1");
             series2 = new XYSeries("Function 2");
             dataset = new XYSeriesCollection();
             dataset.addSeries(series1);
             dataset.addSeries(series2);
+
+            //Set Size
+            this.setSize(200, 100);
 
             chart = ChartFactory.createXYLineChart(
                     "",
@@ -70,6 +76,7 @@ public class PlotService extends ApplicationFrame {
                 updateGraph(timer);
             });
             graphTimer.start();
+
         }
 
         // Method to retrieve the JFreeChart instance
@@ -102,4 +109,6 @@ public class PlotService extends ApplicationFrame {
             // Replace this with your second function calculation
             return Math.cos(2.0 * Math.PI * x) * Math.sin(2 * Math.PI * t);
         }
+
+
     }
