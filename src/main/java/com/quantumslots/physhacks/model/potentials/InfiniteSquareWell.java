@@ -15,17 +15,12 @@ public class InfiniteSquareWell extends PotentialFunction {
      * Default constructor for the infinite square well.
      * It creates a wave function with only the first eigenbasis
      */
-    public InfiniteSquareWell() {
-        super(Potentials.InfiniteSquareWell);
-    }
 
     /**
      * Constructor
-     * @param basisFunctions Holds the values for which eigenbasis to use
-     * @param magnitudes Holds the value of the magnitudes of the eigenbasis
      */
-    public InfiniteSquareWell(ArrayList<Integer> basisFunctions, ArrayList<Double> magnitudes, double mass) {
-        super(Potentials.InfiniteSquareWell, basisFunctions, magnitudes, mass);
+    public InfiniteSquareWell() {
+        super(Potentials.InfiniteSquareWell);
     }
 
     @Override

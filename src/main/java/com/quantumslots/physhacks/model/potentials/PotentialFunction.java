@@ -41,7 +41,7 @@ public abstract class PotentialFunction {
         int count = random.nextInt(6) + 5; // Generate a random count between 5 and 10
 
         while (basisFunctions.size() < count) {
-            int randomNumber = random.nextInt(6) + 5; // Generate a random number between 5 and 10
+            int randomNumber = random.nextInt(11); // Generate a random number between 5 and 10
             if (!basisFunctions.contains(randomNumber)) {
                 basisFunctions.add(randomNumber);
             }
@@ -137,7 +137,6 @@ public abstract class PotentialFunction {
 
     /**
      * Makes sure the sum of the square of the magnitudes is equal to 1
-     * @return True if succeeded, false otherwise
      */
     private void normalizeMagnitudes() {
         double sum = 0;
