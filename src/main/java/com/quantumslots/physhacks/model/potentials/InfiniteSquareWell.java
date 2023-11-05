@@ -32,9 +32,10 @@ public class InfiniteSquareWell extends PotentialFunction {
      */
     public double evaluate_probability(double x1, double x2, ArrayList<Integer> basisFunctions, ArrayList<Double> magnitudes) {
         double total = 0;
-        for (int n : basisFunctions) {
-            total += Math.pow(magnitudes.get(n), 2) * (x1 / 2 - Math.sin(n * Math.PI * (x1 + a)) / 2 * Math.PI * n)
-                    -Math.pow(magnitudes.get(n), 2) * (x2 / 2 - Math.sin(n * Math.PI * (x2 + a)) / 2 * Math.PI * n);
+        for (int i=0; i<basisFunctions.size();i++) {
+            int  n = basisFunctions.get(i);
+            total += Math.pow(magnitudes.get(i), 2) * (x1 / 2 - Math.sin(n * Math.PI * (x1 + a)) / 2 * Math.PI * n)
+                    -Math.pow(magnitudes.get(i), 2) * (x2 / 2 - Math.sin(n * Math.PI * (x2 + a)) / 2 * Math.PI * n);
         }
         return total;
     }
