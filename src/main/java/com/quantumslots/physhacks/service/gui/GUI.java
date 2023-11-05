@@ -1,4 +1,5 @@
 package com.quantumslots.physhacks.service.gui;
+import com.quantumslots.physhacks.controllers.HomeController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
@@ -6,6 +7,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class GUI extends Application {
+
+    //HomeController controller = new HomeController();
     @Override
     public void start(Stage stage) {
         // Create a Text node with "Hello, World" text
