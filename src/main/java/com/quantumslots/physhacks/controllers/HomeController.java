@@ -49,7 +49,7 @@ public class HomeController {
         runTime = System.currentTimeMillis() - startTime;
         double position = potential.makeMeasurement((runTime) * timeMultiplier);
         plotService.updateGraph(position);
-        playerWins(position);
+        updatePlayerCash(position);
         return position;
     }
 
@@ -57,7 +57,7 @@ public class HomeController {
         return position >= player.getSelector1position() && position <= player.getSelector2position();
     }
 
-    private void playerWins(double position) {
+    private void updatePlayerCash(double position) {
         if (isWin(position)){
             player.setBudget(player.getBudget() + rewardService.getReward(potential.getPotentialStructure(),player.getSelector1position(),player.getSelector2position(), runTime, player.getBet()));
         }
