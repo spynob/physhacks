@@ -29,11 +29,40 @@ public abstract class PotentialFunction {
     //Constructor
     public PotentialFunction(Potentials potentialType, ArrayList<Integer> basisFunctions, ArrayList<Double> magnitudes, double mass) {
         potentialStructure = potentialType;
-        this.basisFunctions = basisFunctions;
-        this.magnitudes = magnitudes; // make function to randomize magnitudes
+        this.basisFunctions = initializeBasisFunctions();
+        this.magnitudes = initializeMagnitudes(); // make function to randomize magnitudes
         this.mass = mass;
         normalizeMagnitudes();
     }
+
+    public ArrayList<Integer> initializeBasisFunctions() {
+        ArrayList<Integer> basisFunctions = new ArrayList<>();
+        Random random = new Random();
+        int count = random.nextInt(6) + 5; // Generate a random count between 5 and 10
+
+        while (basisFunctions.size() < count) {
+            int randomNumber = random.nextInt(6) + 5; // Generate a random number between 5 and 10
+            if (!basisFunctions.contains(randomNumber)) {
+                basisFunctions.add(randomNumber);
+            }
+        }
+
+        return basisFunctions;
+    }
+
+    public ArrayList<Double> initializeMagnitudes() {
+        ArrayList<Integer> basis = this.basisFunctions;
+        ArrayList<Double> magnitudes = new ArrayList<>();
+        Random random = new Random();
+
+        for (int i = 0; i < basis.size(); i++) {
+            double randomMagnitude = 0.0001 + (10 - 0.0001) * random.nextDouble();
+            magnitudes.add(randomMagnitude);
+        }
+
+        return magnitudes;
+    }
+
 
     public abstract double evaluate_probability(double x1, double x2, ArrayList<Integer> basisFunctions, ArrayList<Double> magnitudes);
 
