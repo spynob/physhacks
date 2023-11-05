@@ -2,8 +2,8 @@ package com.quantumslots.physhacks.service.gui;
 
 import com.quantumslots.physhacks.controllers.HomeController;
 import com.quantumslots.physhacks.model.Potentials;
-import com.quantumslots.physhacks.service.TimeService;
-import com.quantumslots.physhacks.service.gui.PlotService;
+import com.quantumslots.physhacks.model.potentials.InfiniteSquareWell;
+import com.quantumslots.physhacks.model.potentials.PotentialFunction;
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
@@ -15,17 +15,16 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jfree.chart.ChartPanel;
-import com.quantumslots.physhacks.controllers.HomeController;
-import com.quantumslots.physhacks.model.potentials.PotentialFunction;
-import com.quantumslots.physhacks.service.TimeService;
+
 
 
 public class GUITest extends Application {
     private HomeController homeController;
     private PlotService plotService;
     public GUITest() {
-        plotService = new PlotService("");
-        homeController = new HomeController(Potentials.InfiniteSquareWell, plotService);
+        PotentialFunction potential = new InfiniteSquareWell();
+        plotService = new PlotService("", potential);
+        homeController = new HomeController(potential, plotService);
     }
 
 
@@ -80,6 +79,10 @@ public class GUITest extends Application {
 
     private void triggerMeasure() {
         double position = homeController.makeAMeasurement();
+        plotService.updateGraph(position);
+        if (homeController.isWin(position)){
+            // handle win
+        }
     }
 
     public static void main(String[] args) {

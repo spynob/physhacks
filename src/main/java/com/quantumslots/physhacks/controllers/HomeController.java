@@ -31,48 +31,43 @@ public class HomeController {
     private float timeMultiplier = 1;
 
     //@RequestMapping(value = "/", method = RequestMethod.GET)
-    public HomeController(Potentials potential, PlotService plotService){
+    public HomeController(PotentialFunction potential, PlotService plotService) {
         changePotential(potential);
         this.plotService = plotService;
     }
 
-    public void placeBet(int bet){
+    public void placeBet(int bet) {
         player.setBet(bet);
         startTime();
     }
 
-    public void selectRange(float selector1, float selector2){
+    public void selectRange(float selector1, float selector2) {
         player.setSelector1position(selector1);
         player.setSelector2position(selector2);
     }
 
-    public void startTime(){
+    public void startTime() {
         startTime = System.currentTimeMillis();
     }
 
-    public void changePotential(Potentials potential){
-        switch (potential){
-            case InfiniteSquareWell:
-                this.potential = new InfiniteSquareWell();
-                break;
-            default:
-                throw new IllegalArgumentException();
-        }
+    public void changePotential(PotentialFunction potential) {
+        this.potential = potential;
     }
 
     //@RequestMapping(value = "/measure", method = RequestMethod.POST)
-    public double makeAMeasurement(){
+    public double makeAMeasurement() {
         return potential.makeMeasurement((startTime - System.currentTimeMillis()) * timeMultiplier);
     }
 
-    private boolean isWin(double position){
-        return position >= player.getSelector1position() && position<= player.getSelector2position();
+    public boolean isWin(double position) {
+        return position >= player.getSelector1position() && position <= player.getSelector2position();
     }
 
-    private void generateModel(Model model){
+    private void generateModel(Model model) {
         model.addAttribute("player", player);
     }
-    public void measure(double time){
+
+    public void measure(double time) {
         double position = potential.makeMeasurement(time);
         float selector1 = player.getSelector1position();
         float selector2 = player.getSelector2position();
