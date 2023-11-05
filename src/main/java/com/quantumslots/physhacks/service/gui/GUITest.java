@@ -46,25 +46,28 @@ public class GUITest extends Application {
 
         StackPane leftPane = new StackPane(chartNode);
 
-        Label instructionLabel1 = new Label("Enter a number between -1 and 1");
-        Label instructionLabel2 = new Label("to select the range where you think");
-        Label instructionLabel3 = new Label("the particle will be and place your bet!");
-
+        Label betLabel = new Label("Enter an amount to bet:");
         inputField1 = new TextField();
-        inputField1.setPromptText("Enter Bet: ");
+        inputField1.setPromptText("Enter Bet:");
 
+        Label boundLabel = new Label("Select a range for the bet:");
+        Label leftBoundLabel = new Label("Left Bound:");
         inputField2 = new TextField();
-        inputField2.setPromptText("Enter left bound: ");
-
+        inputField2.setPromptText("Enter left bound:");
+        Label rightBoundLabel = new Label("Right Bound:");
         inputField3 = new TextField();
-        inputField3.setPromptText("Enter right bound: ");
+        inputField3.setPromptText("Enter right bound:");
 
         Button placeBetButton = new Button("Place Bet");
         placeBetButton.setOnAction(e -> placeBet(inputField1.getText(), inputField2.getText(), inputField3.getText()));
 
         VBox textFieldsPane = new VBox(
-                new VBox(instructionLabel1, instructionLabel2, instructionLabel3, inputField1),
-                new VBox(inputField2, placeBetButton)
+                betLabel,
+                inputField1,
+                boundLabel,
+                new HBox(leftBoundLabel, inputField2),
+                new HBox(rightBoundLabel, inputField3),
+                placeBetButton
         );
         textFieldsPane.setSpacing(10);
 
