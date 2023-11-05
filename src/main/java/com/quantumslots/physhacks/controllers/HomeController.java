@@ -60,7 +60,7 @@ public class HomeController {
         if (selector1 <= position && position <= selector2) {
             // what are gains
             int gains = rewardService.getReward(potential.getPotentialStructure(), selector1, selector2, time, player.getBet());
-            player.setCoins(player.getCoins() + gains);
+            player.setBudget(player.getBudget() + gains);
         }
     }
 }
