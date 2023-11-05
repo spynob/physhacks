@@ -86,7 +86,7 @@ public abstract class PotentialFunction {
         double total = 0;
         for (int i=0;i<basisFunctions.size();i++) {
             int n = basisFunctions.get(i);
-            total += magnitudes.get(i) * eigenBasis(x, n, i) * Math.sin(energy(n) * t);
+            total += magnitudes.get(i) * eigenBasis(x, n, i);
         }
         return total;
     }

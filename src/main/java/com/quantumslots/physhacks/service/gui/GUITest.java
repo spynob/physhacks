@@ -20,20 +20,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import org.jfree.chart.ChartPanel;
 import javafx.scene.control.TextField;
-import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.layout.*;
-import javafx.stage.Stage;
-import javafx.embed.swing.SwingNode;
-import org.jfree.chart.ChartPanel;
-import javafx.scene.control.TextField;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.paint.Color;
+
 
 public class GUITest extends Application {
     private HomeController homeController;
