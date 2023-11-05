@@ -21,7 +21,6 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import org.jfree.chart.ChartPanel;
 import javafx.scene.control.TextField;
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -33,6 +32,9 @@ import javafx.stage.Stage;
 import javafx.embed.swing.SwingNode;
 import org.jfree.chart.ChartPanel;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.paint.Color;
 
 public class GUITest extends Application {
     private HomeController homeController;
@@ -63,10 +65,6 @@ public class GUITest extends Application {
 
         StackPane leftPane = new StackPane(chartNode);
 
-        cashLabel = new Label("Cash: $" + homeController.getCash());
-        cashLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14)); // Adjust font style
-        cashLabel.setTextFill(Color.GREEN); // Adjust font color
-
         Label betLabel = new Label("Enter an amount to bet:");
         betField = new TextField();
         betField.setPromptText("Enter Bet:");
@@ -92,9 +90,16 @@ public class GUITest extends Application {
         );
         textFieldsPane.setSpacing(10);
 
-        VBox topRightPane = new VBox(cashLabel);
-        topRightPane.setSpacing(10);
-        topRightPane.setAlignment(Pos.TOP_RIGHT);
+        // Create a VBox for the cash label
+        VBox cashPane = new VBox();
+        cashLabel = new Label("Cash: $" + homeController.getCash());
+        cashLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        cashLabel.setTextFill(Color.GOLDENROD);
+        cashPane.getChildren().add(cashLabel);
+
+        // Create an HBox for the cash label and position it in the bottom-right corner
+        HBox bottomRightPane = new HBox(cashPane);
+        bottomRightPane.setAlignment(Pos.BOTTOM_RIGHT);
 
         Button measureButton = new Button("Make Measurement");
         measureButton.setOnAction(e -> triggerMeasure());
@@ -106,7 +111,7 @@ public class GUITest extends Application {
         HBox buttonPane = new HBox(measureButton);
         buttonPane.setPadding(new Insets(10));
 
-        VBox root = new VBox(chartAndTextFields, buttonPane);
+        VBox root = new VBox(chartAndTextFields, buttonPane, bottomRightPane);
 
         Scene scene = new Scene(root, 800, 600);
 
@@ -122,7 +127,7 @@ public class GUITest extends Application {
     }
 
     private void placeBet(String bet, String leftBound, String rightBound) {
-        homeController.placeBet(Integer.parseInt(bet), Float.parseFloat(leftBound),Float.parseFloat(rightBound));
+        homeController.placeBet(Integer.parseInt(bet), Float.parseFloat(leftBound), Float.parseFloat(rightBound));
     }
 
     public static void main(String[] args) {
