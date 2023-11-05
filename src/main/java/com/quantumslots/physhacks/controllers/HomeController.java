@@ -41,16 +41,15 @@ public class HomeController {
     }
 
     public void changePotential(Potentials potential){}
+    public void measure(double time){
+        double position = potential.makeMeasurement(time);
+        float selector1 = player.getSelector1position();
+        float selector2 = player.getSelector2position();
 
-    @RequestMapping(value = "/measure", method = RequestMethod.POST)
-    public String measure(Model model, @ModelAttribute Player newPlayerProfile){
-        player.setSelector1position(newPlayerProfile.getSelector1position());
-        player.setSelector2position(newPlayerProfile.getSelector2position());
-        return HOME;
+        if (selector1 <= position && position <= selector2) {
+            // what are gains
+            int gains = rewardService.getReward(potential.getPotentialStructure(), selector1, selector2, time, player.getBet());
+            player.setCoins(player.getCoins() + gains);
+        }
     }
-
-    private void generateModel(Model model){
-        model.addAttribute("player", player);
-    }
-
 }

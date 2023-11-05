@@ -35,6 +35,7 @@ public class RewardService {
         float range = Math.abs(selector1 - selector2);
         float screen = 10;
 
+    public int getReward(Potentials potential, float selector1, float selector2, double time, int bet){
         switch (potential){
             case InfiniteSquareWell:
                 time = 1;
